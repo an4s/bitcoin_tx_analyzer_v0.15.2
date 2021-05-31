@@ -49,6 +49,7 @@
 #include <stdint.h>
 #include <stdio.h>
 #include <memory>
+#include "txAnalyzer.h"
 
 #ifndef WIN32
 #include <signal.h>
@@ -1718,6 +1719,23 @@ bool AppInitMain(boost::thread_group& threadGroup, CScheduler& scheduler)
 
     if (!connman.Start(scheduler, connOptions)) {
         return false;
+    }
+
+    if(gArgs.GetBoolArg("-enable-tx-analysis", false))
+    {
+        std::cout << "> TX analysis enabled" << std::endl;
+        std::cout << "> Initializing TX analyzer" << std::endl;
+        if(initTXAnalyzer(gArgs.GetArg("-ta-input-filename", "ta-input-file"))
+        )
+        {
+            std::cout << "> TX analyzer initialized successfully" << std::endl;
+            std::cout << "> Running TX analysis" << std::endl;
+            threadGroup.create_thread(txAnalyzerThread);
+        }
+        else
+        {
+            std::cout << "> TX analyzer intializing failed" << std::endl;
+        }
     }
 
     // ********************************************************* Step 12: finished

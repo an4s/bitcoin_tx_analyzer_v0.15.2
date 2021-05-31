@@ -1721,6 +1721,7 @@ bool AppInitMain(boost::thread_group& threadGroup, CScheduler& scheduler)
         return false;
     }
 
+    // initialize and start an independent thread to perform analysis on transactions
     if(gArgs.GetBoolArg("-enable-tx-analysis", false))
     {
         std::cout << "> TX analysis enabled" << std::endl;

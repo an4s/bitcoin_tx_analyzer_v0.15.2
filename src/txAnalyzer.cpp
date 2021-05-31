@@ -18,13 +18,6 @@
 #include <iomanip>
 
 
-struct txinfo {
-    CAmount fee;
-    unsigned int size;
-    std::vector<CTxIn> parents;
-    txinfo(CAmount f, unsigned int s, std::vector<CTxIn> p) : fee(f), size(s), parents(p) {}
-};
-
 // function prototypes
 CAmount getTXFee(std::string txHash);
 std::pair<int, unsigned int> getTXSize(std::string txHash);
@@ -37,6 +30,7 @@ static std::vector<std::pair<std::string, FILE *>> fHandles;
 static bool InitSuccess = true;
 static fs::path basedir;
 
+// initialize tx analyzer
 bool initTXAnalyzer(std::string ifname)
 {
     basedir = GetDataDir() / "tx-analysis-files";
@@ -100,6 +94,7 @@ bool initTXAnalyzer(std::string ifname)
     return true;
 }
 
+// tx analyzer thread does not interfere with the main thread
 void txAnalyzerThread()
 {
     char opt = ' ';
@@ -127,6 +122,7 @@ void txAnalyzerThread()
     std::cout << "> TX analysis complete" << std::endl;
 }
 
+// read transaction hashes to analyze from a file
 bool ReadTXHashesFromFile(FILE * fHandle, std::vector<std::string> & hashes)
 {
     char * line = NULL;
@@ -150,6 +146,7 @@ bool ReadTXHashesFromFile(FILE * fHandle, std::vector<std::string> & hashes)
     return true;
 }
 
+// analyze transactions: for each transaction, its fee, size, and parents are found and written to file
 void txAnalyzer(std::pair<std::string, FILE *> f)
 {
     std::cout << ">> INFO - Reading hashes from file: <" << f.first << ">" << std::endl;
@@ -206,6 +203,7 @@ void txAnalyzer(std::pair<std::string, FILE *> f)
     WriteToDisk(_txinfo, f.first);
 }
 
+// find parents of a given transaction
 std::pair<int, std::vector<CTxIn>> getTXParents(std::string txHash)
 {
     CTransactionRef ptx;
@@ -231,6 +229,7 @@ std::pair<int, std::vector<CTxIn>> getTXParents(std::string txHash)
     }
 }
 
+// find size of a given transaction
 std::pair<int, unsigned int> getTXSize(std::string txHash)
 {
     CTransactionRef ptx;
@@ -254,6 +253,7 @@ std::pair<int, unsigned int> getTXSize(std::string txHash)
     }
 }
 
+// find fee of a given transaction
 CAmount getTXFee(std::string txHash)
 {
     CTransactionRef ptx;
@@ -294,6 +294,7 @@ CAmount getTXFee(std::string txHash)
     }
 }
 
+// write data from analysis to file
 void WriteToDisk(std::pair<std::unordered_map<std::string, txinfo *>, std::unordered_set<std::string>> tinfo, std::string f)
 {
     std::string outfilename = f + "_out";

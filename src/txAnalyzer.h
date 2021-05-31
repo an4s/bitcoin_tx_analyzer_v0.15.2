@@ -13,6 +13,7 @@
 
 #include <string>
 
+// function prototypes
 bool initTXAnalyzer(std::string ifname); // name of file containing paths to input files
 void txAnalyzerThread();
 

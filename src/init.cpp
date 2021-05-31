@@ -1722,11 +1722,11 @@ bool AppInitMain(boost::thread_group& threadGroup, CScheduler& scheduler)
     }
 
     // initialize and start an independent thread to perform analysis on transactions
-    if(gArgs.GetBoolArg("-enable-tx-analysis", false))
+    if(gArgs.GetBoolArg("-enable-tx-analysis", DEFAULT_TX_ANALYSIS_STATUS))
     {
         std::cout << "> TX analysis enabled" << std::endl;
         std::cout << "> Initializing TX analyzer" << std::endl;
-        if(initTXAnalyzer(gArgs.GetArg("-ta-input-filename", "ta-input-file"))
+        if(initTXAnalyzer(gArgs.GetArg("-ta-input-filename", DEFAULT_TA_INPUT_FILENAME))
         )
         {
             std::cout << "> TX analyzer initialized successfully" << std::endl;

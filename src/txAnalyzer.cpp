@@ -18,6 +18,13 @@
 #include <iomanip>
 
 
+struct txinfo {
+    CAmount fee;
+    unsigned int size;
+    std::vector<CTxIn> parents;
+    txinfo(CAmount f, unsigned int s, std::vector<CTxIn> p) : fee(f), size(s), parents(p) {}
+};
+
 // function prototypes
 CAmount getTXFee(std::string txHash);
 std::pair<int, unsigned int> getTXSize(std::string txHash);

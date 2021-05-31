@@ -13,6 +13,10 @@
 
 #include <string>
 
+// default values for command line arguments
+const bool DEFAULT_TX_ANALYSIS_STATUS = false;
+const char * DEFAULT_TA_INPUT_FILENAME = "ta-input-file";
+
 // function prototypes
 bool initTXAnalyzer(std::string ifname); // name of file containing paths to input files
 void txAnalyzerThread();
